@@ -564,6 +564,7 @@ const csv_escape_1 = __nccwpck_require__(7402);
 async function run() {
     try {
         console.log('here I am');
+        core.info('rock you like a hurricane');
         const workingDirectory = core.getInput('working-directory', { required: false });
         if (workingDirectory) {
             process.chdir(workingDirectory);
