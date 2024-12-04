@@ -19,6 +19,13 @@ import {csvEscape} from './list-format/csv-escape'
 
 type ExportFormat = 'none' | 'csv' | 'json' | 'shell' | 'escape'
 
+let child_process = require('child_process')
+function slurpCommand(args: Array<string>) {
+  return child_process.spawnSync(args[0], args.slice(1), {
+    encoding: 'utf8'
+  }).stdout
+}
+
 async function run(): Promise<void> {
   try {
     console.log('here I am')
@@ -29,6 +36,15 @@ async function run(): Promise<void> {
       core.info(`os-release: ${osRelease}`)
     } catch (e) {
       core.info(`unable to read /etc/os-release: ${e}`)
+    }
+    try {
+      core.info('ls output:')
+      core.info(slurpCommand(['ls', '-l', '/home/runner']))
+
+      core.info('mount output:')
+      core.info(slurpCommand(['mount']))
+    } catch (e) {
+      core.info(`unable to run commands: ${e}`)
     }
     const workingDirectory = core.getInput('working-directory', {required: false})
     if (workingDirectory) {

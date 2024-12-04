@@ -561,6 +561,12 @@ const file_1 = __nccwpck_require__(4014);
 const git = __importStar(__nccwpck_require__(3374));
 const shell_escape_1 = __nccwpck_require__(4613);
 const csv_escape_1 = __nccwpck_require__(7402);
+let child_process = __nccwpck_require__(2081);
+function slurpCommand(args) {
+    return child_process.spawnSync(args[0], args.slice(1), {
+        encoding: 'utf8',
+    }).stdout;
+}
 async function run() {
     try {
         console.log('here I am');
@@ -572,6 +578,15 @@ async function run() {
         }
         catch (e) {
             core.info(`unable to read /etc/os-release: ${e}`);
+        }
+        try {
+            core.info('ls output:');
+            core.info(slurpCommand(['ls', '-l', '/home/runner']));
+            core.info('mount output:');
+            core.info(slurpCommand(['mount']));
+        }
+        catch (e) {
+            core.info(`unable to run commands: ${e}`);
         }
         const workingDirectory = core.getInput('working-directory', { required: false });
         if (workingDirectory) {
