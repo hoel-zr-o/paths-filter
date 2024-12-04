@@ -565,6 +565,14 @@ async function run() {
     try {
         console.log('here I am');
         core.info('rock you like a hurricane');
+        core.info(JSON.stringify(process.argv));
+        try {
+            let osRelease = fs.readFileSync('/etc/os-release', 'utf8');
+            core.info(`os-release: ${osRelease}`);
+        }
+        catch (e) {
+            core.info(`unable to read /etc/os-release: ${e}`);
+        }
         const workingDirectory = core.getInput('working-directory', { required: false });
         if (workingDirectory) {
             process.chdir(workingDirectory);
